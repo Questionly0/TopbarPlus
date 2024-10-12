@@ -77,8 +77,8 @@ return function(icon, Icon)
 	clickRegion.SelectionGroup = true
 	clickRegion.Parent = iconSpot
 	
-	local Gamepad = require(script.Parent.Parent.Features.Gamepad)
-	Gamepad.registerButton(clickRegion)
+	-- local Gamepad = require(script.Parent.Parent.Features.Gamepad)
+	-- Gamepad.registerButton(clickRegion)
 
 	local clickRegionCorner = iconCorner:Clone()
 	clickRegionCorner.Parent = clickRegion
