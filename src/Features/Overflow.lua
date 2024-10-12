@@ -66,7 +66,7 @@ function Overflow.start(incomingIcon)
 	end)
 end
 
-function Overflow.getWidth(icon, getMaxWidth)
+function Overflow.getWidth(icon--[[, getMaxWidth]])
 	local widget = icon.widget
 	return widget:GetAttribute("TargetWidth") or widget.AbsoluteSize.X
 end
@@ -83,8 +83,8 @@ function Overflow.updateAvailableIcons(alignment)
 
 	-- We only track items that are directly on the topbar (i.e. not within a parent icon)
 	local ourTotal = 0
-	local holder = holders[alignment]
-	local holderUIList = holder.UIListLayout
+	-- local holder = holders[alignment]
+	-- local holderUIList = holder.UIListLayout
 	local ourOrderedIcons = {}
 	for _, icon in pairs(iconsDict) do
 		local parentUID = icon.parentIconUID
@@ -132,7 +132,7 @@ end
 function Overflow.getRealXPositions(alignment, orderedIcons)
 	-- We calculate the the absolute position of icons instead of reading
 	-- directly to determine where they would be if not within an overflow
-	local joinOverflow = false
+	-- local joinOverflow = false
 	local isLeft = alignment == "Left"
 	local holder = holders[alignment]
 	local holderXPos = holder.AbsolutePosition.X
@@ -179,7 +179,7 @@ function Overflow.updateBoundary(alignment)
 	if ourTotal <= 0 then
 		return
 	end
-	
+
 	-- These are the icons with menus which icons will be moved into
 	-- when overflowing
 	local isCentral = alignment == "Central"
@@ -210,13 +210,13 @@ function Overflow.updateBoundary(alignment)
 	local oppositeOverflowIcon = overflowIcons[oppositeAlignment]
 	local boundary = (isLeft and holderXPos + holderXSize) or holderXPos
 	if nearestOppositeIcon then
-		local oppositeEndWidget = nearestOppositeIcon.widget
+		-- local oppositeEndWidget = nearestOppositeIcon.widget
 		local oppositeRealXPositions = Overflow.getRealXPositions(oppositeAlignment, oppositeOrderedIcons)
 		local oppositeX = oppositeRealXPositions[nearestOppositeIcon.UID]
 		local oppositeXSize = Overflow.getWidth(nearestOppositeIcon)
 		boundary = (isLeft and oppositeX - BOUNDARY_GAP) or oppositeX + oppositeXSize + BOUNDARY_GAP
 	end
-	
+
 	-- We get the left-most icon (if left alignment) or right-most-icon (if
 	-- right alignment) of the central icons group to see if we need to change
 	-- the boundary (if the central icon boundary is smaller than the alignment
@@ -244,7 +244,7 @@ function Overflow.updateBoundary(alignment)
 			end
 		end
 	end
-	
+
 	--[[
 	This updates the maximum size of the overflow menus
 	The menu determines its bounds from the smallest of either:
@@ -306,12 +306,12 @@ function Overflow.updateBoundary(alignment)
 			end
 		end
 	end
-	
+
 	-- Hide the overflows when not in use
 	if overflowIcon.isEnabled ~= joinOverflow then
 		overflowIcon:setEnabled(joinOverflow)
 	end
-	
+
 	-- Have the menus auto selected
 	if overflowIcon.isEnabled and not overflowIcon.overflowAlreadyOpened then
 		overflowIcon.overflowAlreadyOpened = true

@@ -1,4 +1,4 @@
-return function(icon, Icon)
+return function(icon--[[, Icon]])
 
 	local widget = icon.widget
 	local contents = icon:getInstance("Contents")
@@ -21,7 +21,7 @@ return function(icon, Icon)
 	indicatorButton.BorderSizePixel = 0
 	indicatorButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	indicatorButton.Parent = indicator
-	
+
 	local GuiService = game:GetService("GuiService")
 	local GamepadService = game:GetService("GamepadService")
 	local ourClickRegion = icon:getInstance("ClickRegion")

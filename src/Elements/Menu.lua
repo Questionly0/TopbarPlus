@@ -19,7 +19,7 @@ return function(icon)
 	menu.ScrollBarImageTransparency = 0.8
 	menu.BorderSizePixel = 0
 	menu.Selectable = false
-	
+
 	local Icon = require(icon.iconModule)
 	local menuUIListLayout = Icon.container.TopbarStandard:FindFirstChild("UIListLayout", true):Clone()
 	menuUIListLayout.Name = "MenuUIListLayout"
@@ -33,11 +33,11 @@ return function(icon)
 	menuGap.AnchorPoint = Vector2.new(0, 0.5)
 	menuGap.ZIndex = 5
 	menuGap.Parent = menu
-	
+
 	local hasStartedMenu = false
 	local Themes = require(script.Parent.Parent.Features.Themes)
 	local function totalChildrenChanged()
-		
+
 		local menuJanitor = icon.menuJanitor
 		local totalIcons = #icon.menuIcons
 		if hasStartedMenu then
@@ -48,14 +48,14 @@ return function(icon)
 			return
 		end
 		hasStartedMenu = true
-		
+
 		-- Listen for changes
 		menuJanitor:add(icon.toggled:Connect(function()
 			if #icon.menuIcons > 0 then
 				icon.updateSize:Fire()
 			end
 		end))
-		
+
 		-- Modify appearance of menu icon when joined
 		local _, modificationUID = icon:modifyTheme({
 			{"Menu", "Active", true},
@@ -65,7 +65,7 @@ return function(icon)
 				icon:removeModification(modificationUID)
 			end)
 		end)
-		
+
 		-- For right-aligned icons, this ensures their menus
 		-- close button appear instantly when selected (instead
 		-- of partially hidden from view)
@@ -80,7 +80,7 @@ return function(icon)
 		end
 		menuJanitor:add(icon.selected:Connect(rightAlignCanvas))
 		menuJanitor:add(menu:GetPropertyChangedSignal("AbsoluteCanvasSize"):Connect(rightAlignCanvas))
-		
+
 		-- Apply a close selected image if the user hasn't applied thier own
 		local stateGroup = icon:getStateGroup()
 		local imageDeselected = Themes.getThemeValue(stateGroup, "IconImage", "Image", "Deselected")
@@ -101,7 +101,7 @@ return function(icon)
 
 		-- Change order of spot when alignment changes
 		local iconSpot = icon:getInstance("IconSpot")
-		local menuGap = icon:getInstance("MenuGap")
+		menuGap = icon:getInstance("MenuGap")
 		local function updateAlignent()
 			local alignment = icon.alignment
 			if alignment == "Right" then
@@ -114,7 +114,7 @@ return function(icon)
 		end
 		menuJanitor:add(icon.alignmentChanged:Connect(updateAlignent))
 		updateAlignent()
-		
+
 		-- This updates the scrolling frame to only display a scroll
 		-- length equal to the distance produced by its MaxIcons
 		menu:GetAttributeChangedSignal("MenuCanvasWidth"):Connect(function()
@@ -154,30 +154,30 @@ return function(icon)
 				icon.startMenuUpdate:Fire()
 			end)
 		end
-		local iconButton = icon:getInstance("IconButton")
-		local previousButtonWidth = iconButton.AbsoluteSize.X
+		-- local iconButton = icon:getInstance("IconButton")
+		-- local previousButtonWidth = iconButton.AbsoluteSize.X
 		menuJanitor:add(menu.ChildAdded:Connect(startMenuUpdate))
 		menuJanitor:add(menu.ChildRemoved:Connect(startMenuUpdate))
 		menuJanitor:add(menu:GetAttributeChangedSignal("MaxIcons"):Connect(startMenuUpdate))
 		menuJanitor:add(menu:GetAttributeChangedSignal("MaxWidth"):Connect(startMenuUpdate))
 		startMenuUpdate()
 	end
-	
+
 	icon.menuChildAdded:Connect(totalChildrenChanged)
 	icon.menuSet:Connect(function(arrayOfIcons)
 		-- Reset any previous icons
-		for i, otherIconUID in pairs(icon.menuIcons) do
+		for _, otherIconUID in pairs(icon.menuIcons) do
 			local otherIcon = Icon.getIconByUID(otherIconUID)
 			otherIcon:destroy()
 		end
 		-- Apply new icons
-		local totalNewIcons = #arrayOfIcons
+		-- local totalNewIcons = #arrayOfIcons
 		if type(arrayOfIcons) == "table" then
-			for i, otherIcon in pairs(arrayOfIcons) do
+			for _, otherIcon in pairs(arrayOfIcons) do
 				otherIcon:joinMenu(icon)
 			end
 		end
 	end)
-	
+
 	return menu
 end

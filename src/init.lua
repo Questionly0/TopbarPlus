@@ -1,8 +1,8 @@
 --[[
-	
+
 	The majority of this code is an interface designed to make it easy for you to
 	work with TopbarPlus (most methods for instance reference :modifyTheme()).
-	The processing overhead mainly consists of applying themes and calculating 
+	The processing overhead mainly consists of applying themes and calculating
 	appearance (such as size and width of labels) which is handled in about
 	200 lines of code here and the Widget UI module. This has been achieved
 	in v3 by outsourcing a majority of previous calculations to inbuilt Roblox
@@ -16,14 +16,14 @@
 
 
 	My primary goals for the v3 re-write have been to:
-		
+
 	1. Improve code readability and organisation (reduced lines of code within
 	   Icon+IconController from 3200 to ~950, separated UI elements, etc)
-		
+
 	2. Improve ease-of-use (themes now actually make sense and can account
 	   for any modifications you want, converted to a package for
 	   quick installation and easy-comparisons of new updates, etc)
-	
+
 	3. Provide support for all key features of the new Roblox topbar
 	   while improving performance of the module (deferring and collecting
 	   changes then calling as a singular, utilizing inbuilt Roblox features
@@ -34,10 +34,10 @@
 
 
 -- SERVICES
-local LocalizationService = game:GetService("LocalizationService")
+-- local LocalizationService = game:GetService("LocalizationService")
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local TextService = game:GetService("TextService")
+-- local RunService = game:GetService("RunService")
+-- local TextService = game:GetService("TextService")
 local StarterGui = game:GetService("StarterGui")
 local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
@@ -64,7 +64,7 @@ end
 local Signal = require(iconModule.Packages.GoodSignal)
 local Janitor = require(iconModule.Packages.Janitor)
 local Utility = require(iconModule.Utility)
-local Attribute = require(iconModule.Attribute)
+-- local Attribute = require(iconModule.Attribute)
 local Themes = require(iconModule.Features.Themes)
 -- local Gamepad = require(iconModule.Features.Gamepad)
 local Overflow = require(iconModule.Features.Overflow)
@@ -256,7 +256,7 @@ function Icon.new()
 	local widget = janitor:add(require(elements.Widget)(self, Icon))
 	self.widget = widget
 	self:setAlignment()
-	
+
 	-- It's important we set an order otherwise icons will not align
 	-- correctly within menus
 	totalCreatedIcons += 1
@@ -388,7 +388,7 @@ function Icon.new()
 	local sourcePath = string.split(source, ".")
 	local origin = game
 	local originsScreenGui
-	for i, sourceName in pairs(sourcePath) do
+	for _, sourceName in pairs(sourcePath) do
 		origin = origin:FindFirstChild(sourceName)
 		if not origin then
 			break
@@ -404,7 +404,7 @@ function Icon.new()
 	end
 
 	-- Additional children behaviour when toggled (mostly notices)
-	local noticeLabel = self:getInstance("NoticeLabel")
+	-- local noticeLabel = self:getInstance("NoticeLabel")
 	self.toggled:Connect(function(isSelected)
 		self.noticeChanged:Fire(self.totalNotices)
 		for childIconUID, _ in pairs(self.childIconsDict) do
@@ -419,7 +419,7 @@ function Icon.new()
 			end
 		end
 	end)
-	
+
 	-- This closes/reopens the chat or playerlist if the icon is a dropdown
 	-- In the future I'd prefer to use the position+size of the chat
 	-- to determine whether to close dropdown (instead of non-right-set)
@@ -451,7 +451,7 @@ function Icon.new()
 			StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, true)
 		end
 	end)
-	
+
 	-- There's a rare occassion where the appearance is not
 	-- fully set to deselected so this ensures the icons
 	-- appearance is fully as it should be
@@ -462,7 +462,7 @@ function Icon.new()
 			self:refresh()
 		end
 	end)
-	
+
 	-- Call icon added
 	Icon.iconAdded:Fire(self)
 
@@ -552,7 +552,7 @@ function Icon:getInstance(name)
 			end
 			-- If the child is a fake placeholder instance (such as dropdowns, notices, etc)
 			-- then its important we scan the real original instance instead of this clone
-			local previousChild = child
+			-- local previousChild = child
 			local realChild = Themes.getRealInstance(child)
 			if realChild then
 				child = realChild
@@ -649,7 +649,7 @@ function Icon:setBehaviour(collectiveOrInstanceName, property, callback, refresh
 end
 
 function Icon:modifyTheme(modifications, modificationUID)
-	local modificationUID = Themes.modify(self, modifications, modificationUID)
+	modificationUID = Themes.modify(self, modifications, modificationUID)
 	return self, modificationUID
 end
 
@@ -862,7 +862,7 @@ function Icon:_updateSelectionInstances()
 	end
 end
 
-function Icon:_setToggleItemsVisible(bool, fromSource, sourceIcon)
+function Icon:_setToggleItemsVisible(bool, _fromSource, sourceIcon)
 	for toggleItem, _ in pairs(self.toggleItems) do
 		if not sourceIcon or sourceIcon == self or sourceIcon.toggleItems[toggleItem] == nil then
 			local property = "Visible"

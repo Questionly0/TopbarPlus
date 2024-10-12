@@ -15,7 +15,7 @@
 
 
 return {
-	
+
 	-- When no state is specified the modification is applied to *all* states (Deselected, Selected and Viewing)
 	{"IconCorners", "CornerRadius", UDim.new(1, 0)},
 	{"Selection", "RotationSpeed", 1},
@@ -25,7 +25,7 @@ return {
 		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
 		ColorSequenceKeypoint.new(1, Color3.fromRGB(86, 86, 86)),
 	})},
-	
+
 	-- When the icon is deselected
 	{"IconImage", "Image", "", "Deselected"},
 	{"IconLabel", "Text", "", "Deselected"},
@@ -57,7 +57,7 @@ return {
 	{"NoticeLabel", "TextSize", 13, "Deselected"},
 	{"PaddingLeft", "Size", UDim2.new(0, 9, 1, 0), "Deselected"},
 	{"PaddingRight", "Size", UDim2.new(0, 11, 1, 0), "Deselected"},
-	
+
 	-- When the icon is selected
 	-- Selected also inherits everything from Deselected if nothing is set
 	{"IconSpot", "BackgroundTransparency", 0.7, "Selected"},
@@ -65,9 +65,9 @@ return {
 	{"IconSpotGradient", "Enabled", true, "Selected"},
 	{"IconSpotGradient", "Rotation", 45, "Selected"},
 	{"IconSpotGradient", "Color", ColorSequence.new(Color3.fromRGB(96, 98, 100), Color3.fromRGB(77, 78, 80)), "Selected"},
-	
-	
+
+
 	-- When a cursor is hovering above, a controller highlighting, or touchpad (mobile) pressing (but not released)
 	--{"IconSpot", "BackgroundTransparency", 0.75, "Viewing"},
-	
+
 }

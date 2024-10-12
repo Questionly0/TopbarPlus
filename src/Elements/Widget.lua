@@ -76,7 +76,7 @@ return function(icon, Icon)
 	clickRegion.Selectable = true
 	clickRegion.SelectionGroup = true
 	clickRegion.Parent = iconSpot
-	
+
 	-- local Gamepad = require(script.Parent.Parent.Features.Gamepad)
 	-- Gamepad.registerButton(clickRegion)
 
@@ -180,8 +180,8 @@ return function(icon, Icon)
 
 	local TweenService = game:GetService("TweenService")
 	local resizingCount = 0
-	local repeating = false
-	local function handleLabelAndImageChangesUnstaggered(forceUpdateString)
+	-- local repeating = false
+	local function handleLabelAndImageChangesUnstaggered(--[[forceUpdateString]])
 
 		-- We defer changes by a frame to eliminate all but 1 requests which
 		-- could otherwise stack up to 20+ requests in a single frame
@@ -193,7 +193,7 @@ return function(icon, Icon)
 			local usingIndicator = indicator and indicator.Visible
 			local usingText = usingIndicator or iconLabel.Text ~= ""
 			local usingImage = iconImage.Image ~= "" and iconImage.Image ~= nil
-			local alignment = Enum.HorizontalAlignment.Center
+			-- local alignment = Enum.HorizontalAlignment.Center
 			local NORMAL_BUTTON_SIZE = UDim2.fromScale(1, 1)
 			local buttonSize = NORMAL_BUTTON_SIZE
 			if usingImage and not usingText then
@@ -214,7 +214,7 @@ return function(icon, Icon)
 				paddingLeft.Visible = true
 				paddingCenter.Visible = not usingIndicator
 				paddingRight.Visible = not usingIndicator
-				alignment = Enum.HorizontalAlignment.Left
+				-- alignment = Enum.HorizontalAlignment.Left
 			end
 			button.Size = buttonSize
 
@@ -340,7 +340,7 @@ return function(icon, Icon)
 			handleLabelAndImageChanges()
 			if firstTimeSettingFontFace then
 				firstTimeSettingFontFace = false
-				for i = 1, 10 do
+				for _ = 1, 10 do
 					task.wait(1)
 					handleLabelAndImageChanges()
 				end

@@ -34,7 +34,7 @@ return function(icon, Icon)
 	noticeLabel.TextWrap = true
 	noticeLabel.Font = Enum.Font.Arial
 	noticeLabel.Parent = notice
-	
+
 	local iconModule = script.Parent.Parent
 	local packages = iconModule.Packages
 	local Janitor = require(packages.Janitor)
@@ -60,16 +60,14 @@ return function(icon, Icon)
 		end
 		local parentIcon = Icon.getIconByUID(icon.parentIconUID)
 		local dropdownOrMenuActive = #icon.dropdownIcons > 0 or #icon.menuIcons > 0
-		if icon.isSelected and dropdownOrMenuActive then
-			enabled = false
-		elseif parentIcon and not parentIcon.isSelected then
+		if (parentIcon and not parentIcon.isSelected) or (icon.isSelected and dropdownOrMenuActive) then
 			enabled = false
 		end
 		Utility.setVisible(notice, enabled, "NoticeHandler")
 
 	end)
 	icon.noticeStarted:Connect(function(customClearSignal, noticeId)
-	
+
 		if not customClearSignal then
 			customClearSignal = icon.deselected
 		end
@@ -77,7 +75,7 @@ return function(icon, Icon)
 		if parentIcon then
 			parentIcon:notify(customClearSignal)
 		end
-		
+
 		local noticeJanitor = icon.janitor:add(Janitor.new())
 		local noticeComplete = noticeJanitor:add(Signal.new())
 		noticeJanitor:add(icon.endNotices:Connect(function()
@@ -91,7 +89,7 @@ return function(icon, Icon)
 			completeSignal = noticeComplete,
 			clearNoticeEvent = customClearSignal,
 		}
-		local noticeLabel = icon:getInstance("NoticeLabel")
+		noticeLabel = icon:getInstance("NoticeLabel")
 		local function updateNotice()
 			icon.noticeChanged:Fire(icon.totalNotices)
 		end
@@ -105,10 +103,10 @@ return function(icon, Icon)
 			updateNotice()
 		end)
 	end)
-	
+
 	-- Establish the notice
 	notice:SetAttribute("ClipToJoinedParent", true)
 	icon:clipOutside(notice)
-	
+
 	return notice
 end

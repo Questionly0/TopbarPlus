@@ -39,7 +39,7 @@ local function acquireRunnerThreadAndCallEventHandler(fn, ...)
 	freeRunnerThread = acquiredRunnerThread
 end
 
--- Coroutine runner that we create coroutines of. The coroutine can be 
+-- Coroutine runner that we create coroutines of. The coroutine can be
 -- repeatedly resumed with functions to run followed by the argument to run
 -- them with.
 local function runEventHandlerInFreeThread()
@@ -89,10 +89,10 @@ Connection.Destroy = Connection.Disconnect
 
 -- Make Connection strict
 setmetatable(Connection, {
-	__index = function(tb, key)
+	__index = function(_tb, key)
 		error(("Attempt to get Connection::%s (not a valid member)"):format(tostring(key)), 2)
 	end,
-	__newindex = function(tb, key, value)
+	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Connection::%s (not a valid member)"):format(tostring(key)), 2)
 	end
 })
@@ -171,10 +171,10 @@ end
 
 -- Make signal strict
 setmetatable(Signal, {
-	__index = function(tb, key)
+	__index = function(_tb, key)
 		error(("Attempt to get Signal::%s (not a valid member)"):format(tostring(key)), 2)
 	end,
-	__newindex = function(tb, key, value)
+	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Signal::%s (not a valid member)"):format(tostring(key)), 2)
 	end
 })

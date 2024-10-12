@@ -1,5 +1,5 @@
 return function(icon)
-	
+
 	local dropdown = Instance.new("Frame")
 	dropdown.Name = "Dropdown"
 	dropdown.AutomaticSize = Enum.AutomaticSize.XY
@@ -38,7 +38,7 @@ return function(icon)
 	dropdownScroller.Selectable = false
 	dropdownScroller.Active = true
 	dropdownScroller.Parent = dropdown
-	
+
 	local dropdownPadding = Instance.new("UIPadding")
 	dropdownPadding.Name = "DropdownPadding"
 	dropdownPadding.PaddingTop = UDim.new(0, 8)
@@ -52,7 +52,7 @@ return function(icon)
 	dropdownList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	dropdownList.HorizontalFlex = Enum.UIFlexAlignment.SpaceEvenly
 	dropdownList.Parent = dropdownScroller
-	
+
 	local dropdownJanitor = icon.dropdownJanitor
 	local Icon = require(icon.iconModule)
 	icon.dropdownChildAdded:Connect(function(childIcon)
@@ -77,14 +77,14 @@ return function(icon)
 	end)
 	icon.dropdownSet:Connect(function(arrayOfIcons)
 		-- Destroy any previous icons
-		for i, otherIconUID in pairs(icon.dropdownIcons) do
+		for _, otherIconUID in pairs(icon.dropdownIcons) do
 			local otherIcon = Icon.getIconByUID(otherIconUID)
 			otherIcon:destroy()
 		end
 		-- Add new icons
-		local totalNewIcons = #arrayOfIcons
+		-- local totalNewIcons = #arrayOfIcons
 		if type(arrayOfIcons) == "table" then
-			for i, otherIcon in pairs(arrayOfIcons) do
+			for _, otherIcon in pairs(arrayOfIcons) do
 				otherIcon:joinDropdown(icon)
 			end
 		end
@@ -99,13 +99,13 @@ return function(icon)
 	dropdownJanitor:add(icon.toggled:Connect(updateVisibility))
 	updateVisibility()
 	--task.delay(0.2, updateVisibility)
-	
+
 	-- This updates the scrolling frame to only display a scroll
 	-- length equal to the distance produced by its MaxIcons
 	local updateCount = 0
 	local isUpdating = false
 	local function updateMaxIcons()
-		
+
 		-- This prevents more than 1 update occurring every frame
 		updateCount += 1
 		if isUpdating then
@@ -119,7 +119,7 @@ return function(icon)
 				updateMaxIcons()
 			end
 		end)
-			
+
 		local maxIcons = dropdown:GetAttribute("MaxIcons")
 		if not maxIcons then
 			return
@@ -164,6 +164,6 @@ return function(icon)
 	dropdownJanitor:add(dropdown:GetAttributeChangedSignal("MaxIcons"):Connect(updateMaxIcons))
 	dropdownJanitor:add(icon.childThemeModified:Connect(updateMaxIcons))
 	updateMaxIcons()
-	
+
 	return dropdown
 end

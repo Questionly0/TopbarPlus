@@ -116,7 +116,7 @@ return function(icon)
 	labelContent.Size = UDim2.fromScale(1, 1)
 	labelContent.ZIndex = 16
 	labelContent.Parent = keyTag1
-	
+
 	local caret = Instance.new("ImageLabel")
 	caret.Name = "Caret"
 	caret.Image = "rbxasset://LuaPackages/Packages/_Index/UIBlox/UIBlox/AppImageAtlas/img_set_1x_1.png"
@@ -147,7 +147,7 @@ return function(icon)
 	box:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 		dropShadow.Size = UDim2.new(1, 0, 0, box.AbsoluteSize.Y + 8)
 	end)
-	
+
 	-- It's important we match the sizes as this is not
 	-- handles within clipOutside (as it assumes the sizes
 	-- are already the same)
@@ -160,9 +160,9 @@ return function(icon)
 	end
 	captionJanitor:add(caption:GetPropertyChangedSignal("AbsoluteSize"):Connect(matchSize))
 	matchSize()
-	
-	
-	
+
+
+
 	local isCompletelyEnabled = false
 	-- This handles the appearing/disappearing/positioning of the caption
 	local captionHeader = caption.Box.Header
@@ -201,19 +201,19 @@ return function(icon)
 		return UDim2.new(0.5, 0, 1, yOffset)
 	end
 	local function updatePosition(forcedEnabled)
-		
+
 		-- Ignore changes if not enabled to reduce redundant calls
 		if not isCompletelyEnabled then
 			return
 		end
-		
+
 		-- Currently the one thing which isn't accounted for are the bounds of the screen
 		-- This would be an issue if someone sets a long caption text for the left or
 		-- right most icon
 		local enabled = if forcedEnabled ~= nil then forcedEnabled else isCompletelyEnabled
 		local startPosition = getCaptionPosition(not enabled)
 		local endPosition = getCaptionPosition(enabled)
-		
+
 		-- It's essential we reset the carets position to prevent the x sizing bounds
 		-- of the caption from infinitely scaling up
 		if enabled then
@@ -226,7 +226,7 @@ return function(icon)
 			caption.AutomaticSize = Enum.AutomaticSize.Y
 			caption.Size = UDim2.fromOffset(absolute.X, absolute.Y)
 		end
-		
+
 		-- We initially default to the opposite state
 		local previousCaretX
 		local function updateCaret()
@@ -246,7 +246,7 @@ return function(icon)
 		end
 		captionClone.Position = startPosition
 		updateCaret()
-		
+
 		-- Now we tween into the new state
 		local tweenInfo = (enabled and TWEEN_INFO_IN) or TWEEN_INFO_OUT
 		local tween = TweenService:Create(captionClone, tweenInfo, {Position = endPosition})
@@ -255,13 +255,13 @@ return function(icon)
 		tween.Completed:Once(function()
 			updateCaretConnection:Disconnect()
 		end)
-		
+
 	end
 	captionJanitor:add(clickRegion:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 		updatePosition()
 	end))
 	updatePosition(false)
-	
+
 	captionJanitor:add(icon.toggleKeyAdded:Connect(updateHotkey))
 	for keyCodeEnum, _ in pairs(icon.bindedToggleKeys) do
 		updateHotkey(keyCodeEnum)
@@ -291,7 +291,7 @@ return function(icon)
 		updatePosition()
 		updateHotkey()
 	end
-	
+
 	local WAIT_DURATION = 0.5
 	local RECOVER_PERIOD = 0.3
 	local Icon = require(icon.iconModule)
@@ -310,6 +310,6 @@ return function(icon)
 			setCaptionEnabled(false)
 		end
 	end))
-	
+
 	return caption
 end

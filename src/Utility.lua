@@ -69,7 +69,7 @@ function Utility.copyTable(t)
 	assert(type(t) == "table", "First argument must be a table")
 	local tCopy = table.create(#t)
 	for k,v in pairs(t) do
-		if (type(v) == "table") then
+		if type(v) == "table" then
 			tCopy[k] = Utility.copyTable(v)
 		else
 			tCopy[k] = v
@@ -84,7 +84,7 @@ function Utility.generateUID(length)
 	local UID = ""
 	local list = validCharacters
 	local total = #list
-	for i = 1, length do
+	for _ = 1, length do
 		local randomCharacter = list[math.random(1, total)]
 		UID = UID..randomCharacter
 	end
@@ -95,7 +95,7 @@ local instanceTrackers = {}
 function Utility.setVisible(instance, bool, sourceUID)
 	-- This effectively works like a buff object but
 	-- incredibly simplified. It stacks false values
-	-- so that if there is more than more than, the 
+	-- so that if there is more than more than, the
 	-- instance remains hidden even if set visible true
 	local tracker = instanceTrackers[instance]
 	if not tracker then
@@ -112,7 +112,7 @@ function Utility.setVisible(instance, bool, sourceUID)
 	end
 	local isVisible = bool
 	if bool then
-		for sourceUID, _ in pairs(tracker) do
+		for _--[[sourceUID]], _ in pairs(tracker) do
 			isVisible = false
 			break
 		end
@@ -205,7 +205,7 @@ function Utility.clipOutside(icon, instance)
 			return
 		end
 		local isVisible = widget.Visible
-		
+
 		if isOutsideParent then
 			isVisible = false
 		end
@@ -225,7 +225,7 @@ function Utility.clipOutside(icon, instance)
 			local nextIconUID = ourUID
 			local shouldClipToParent = instance:GetAttribute("ClipToJoinedParent")
 			if shouldClipToParent then
-				for i = 1, 10 do -- This is safer than while true do and should never be > 4 parents
+				for _ = 1, 10 do -- This is safer than while true do and should never be > 4 parents
 					local nextIcon = Icon.getIconByUID(nextIconUID)
 					if not nextIcon then
 						break
@@ -293,10 +293,10 @@ function Utility.clipOutside(icon, instance)
 				local viewportWidth = workspace.CurrentCamera.ViewportSize.X
 				local guiWidth = screenGui.AbsoluteSize.X
 				local guiOffset = screenGui.AbsolutePosition.X
-				local widthDifference = guiOffset - topbarInset.Min.X
+				-- local widthDifference = guiOffset - topbarInset.Min.X
 				local oldTopbarCenterOffset = 0--widthDifference/30 -- I have no idea why this works, it just does
 				local offsetX = if icon.isOldTopbar then guiOffset else viewportWidth - guiWidth - oldTopbarCenterOffset
-				
+
 				-- Also add additionalOffset
 				offsetX -= additionalOffsetX
 				absoluteValue += UDim2.fromOffset(-offsetX, topbarInset.Height)
@@ -307,11 +307,11 @@ function Utility.clipOutside(icon, instance)
 			end
 			instance[property] = absoluteValue
 		end
-		
+
 		-- This defer is essential as the listener may be in a different screenGui to the actor
 		local updatePropertyStaggered = Utility.createStagger(0.01, updateProperty)
 		cloneJanitor:add(clone:GetPropertyChangedSignal(absoluteProperty):Connect(updatePropertyStaggered))
-		
+
 		-- This is to patch a weirddddd bug with ScreenGuis with SreenInsets set to
 		-- 'TopbarSafeInsets'. For some reason the absolute position of gui instances
 		-- within this type of screenGui DO NOT accurately update to match their new
@@ -322,13 +322,13 @@ function Utility.clipOutside(icon, instance)
 		-- Here's a GIF of this bug: https://i.imgur.com/VitHdC1.gif
 		local updatePropertyPatch = Utility.createStagger(0.5, updateProperty, true)
 		cloneJanitor:add(clone:GetPropertyChangedSignal(absoluteProperty):Connect(updatePropertyPatch))
-		
+
 	end
 	task.delay(0.1, checkIfOutsideParentXBounds)
 	checkIfOutsideParentXBounds()
 	updateVisibility()
 	trackProperty("Position")
-	
+
 	-- Track visiblity changes
 	cloneJanitor:add(instance:GetPropertyChangedSignal("Visible"):Connect(function()
 		--print("Visiblity changed:", instance, clone, instance.Visible)
@@ -416,7 +416,7 @@ function Utility.joinFeature(originalIcon, parentIcon, iconsArray, scrollingFram
 			end
 		end
 		local Icon = require(originalIcon.iconModule)
-		local parentIcon = Icon.getIconByUID(originalIcon.parentIconUID)
+		parentIcon = Icon.getIconByUID(originalIcon.parentIconUID)
 		if not parentIcon then
 			return
 		end
@@ -425,11 +425,11 @@ function Utility.joinFeature(originalIcon, parentIcon, iconsArray, scrollingFram
 		originalIcon.joinedFrame = false
 		originalIcon:setBehaviour("IconButton", "BackgroundTransparency", nil, true)
 		originalIcon:removeModification("JoinModification")
-		
+
 		local parentHasNoChildren = true
 		local parentChildIcons = parentIcon.childIconsDict
 		parentChildIcons[originalIconUID] = nil
-		for childIconUID, _ in pairs(parentChildIcons) do
+		for _--[[childIconUID]], _ in pairs(parentChildIcons) do
 			parentHasNoChildren = false
 			break
 		end

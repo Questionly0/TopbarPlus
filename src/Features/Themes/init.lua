@@ -13,7 +13,7 @@ local baseTheme = require(script.Default)
 
 
 -- FUNCTIONS
-function Themes.getThemeValue(stateGroup, instanceName, property, iconState)
+function Themes.getThemeValue(stateGroup, instanceName, property--[[, iconState]])
 	if stateGroup then
 		for _, detail in pairs(stateGroup) do
 			local checkingInstanceName, checkingPropertyName, checkingValue = unpack(detail)
@@ -197,9 +197,9 @@ function Themes.modify(icon, modifications, modificationsUID)
 				end
 			end
 			local function updateRecord()
-				for stateName, detail in pairs(stateGroup) do
-					local didMerge = Themes.merge(detail, modification, function(detail)
-						detail[5] = modificationsUID
+				for _stateName, detail in pairs(stateGroup) do
+					local didMerge = Themes.merge(detail, modification, function(idetail)
+						idetail[5] = modificationsUID
 						nowSetIt()
 					end)
 					if didMerge then
@@ -217,7 +217,7 @@ function Themes.modify(icon, modifications, modificationsUID)
 end
 
 function Themes.remove(icon, modificationsUID)
-	for iconState, stateGroup in pairs(icon.appearance) do
+	for _iconState, stateGroup in pairs(icon.appearance) do
 		for i = #stateGroup, 1, -1 do
 			local detail = stateGroup[i]
 			local checkingUID = detail[5]
